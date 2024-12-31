@@ -13,10 +13,13 @@ const PDFUpload = ({ onUploadSuccess }) => {
 
     const formData = new FormData();
     formData.append('file', file);
+
+    backendurl = process.env.REACT_APP_BACKEND_URL
+    const uploadPdfUrl = `${backendUrl}/upload-pdf`;
     
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:8000/api/upload-pdf', formData);
+      const response = await axios.post(uploadPdfUrl, formData);
       onUploadSuccess(response.data.pdf_id);
       navigate('/generate');
     } catch (error) {

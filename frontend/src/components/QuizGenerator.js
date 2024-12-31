@@ -13,11 +13,14 @@ const QuizGenerator = () => {
   const [incompleteQuiz, setIncompleteQuiz] = useState(null);
   const navigate = useNavigate();
 
+  const backendUrl = process.env.REACT_APP_BACKEND_URL
+
   // Fetch PDFs on component mount
   useEffect(() => {
     const fetchPdfs = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/pdfs');
+        const pdf_url = `${backendUrl}/pdfs`;
+        const response = await axios.get(pdf_url);
         console.log('Fetched PDFs:', response.data); // Debugging statement
         setPdfs(response.data);
       } catch (error) {
@@ -35,8 +38,9 @@ const QuizGenerator = () => {
 
       setLoading(true);
       try {
+        const quiz_url = `${backendUrl}/quizzes/pdf/${selectedPdfId}`;
         // Fetch questions for the selected PDF
-        const pdfQuizzesResponse = await axios.get(`http://localhost:8000/api/quizzes/pdf/${selectedPdfId}`);
+        const pdfQuizzesResponse = await axios.get(quiz_url);
         const pdfQuizzes = pdfQuizzesResponse.data;
 
         console.log('Fetched PDF Quizzes:', pdfQuizzes); // Debugging statement
@@ -49,7 +53,8 @@ const QuizGenerator = () => {
           pdfQuizzes.map(async (quiz) => {
             try {
               // Fetch the user's attempts
-              const attemptsResponse = await axios.get(`http://localhost:8000/api/user-attempts/test-user`);
+              const attempt_url = `${backendUrl}/user-attempts/test-user`;
+              const attemptsResponse = await axios.get(attempt_url);
               console.log('User Attempts:', attemptsResponse.data); // Debugging statement
               const userAttempts = attemptsResponse.data;
 
@@ -86,7 +91,8 @@ const QuizGenerator = () => {
         if (incomplete) {
           // Fetch complete quiz details
           console.log('incomplete:', incomplete); // Debugging statement
-          const quizResponse = await axios.get(`http://localhost:8000/api/quizzes/${incomplete._id}`);
+          const incomplete_quiz_id_url = `${backendUrl}/quizzes/${incompleteQuiz._id}`;
+          const quizResponse = await axios.get(incomplete_quiz_id_url);
           setIncompleteQuiz(quizResponse.data);
         } else {
           setIncompleteQuiz(null);
@@ -144,8 +150,8 @@ const QuizGenerator = () => {
           was_correct: q.submission?.was_correct
         }))
       };
-
-      const response = await axios.post('http://localhost:8000/api/generate-quiz', requestData);
+      const generate_url = `${backendUrl}/generate-quiz`;
+      const response = await axios.post(generate_url, requestData);
       navigate(`/quiz/${response.data.quiz_id}`);
     } catch (error) {
       console.error('Error generating quiz:', error); // Debugging statement

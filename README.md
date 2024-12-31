@@ -81,6 +81,7 @@ Study Buddy is a web application that allows users to upload PDFs, generate quiz
    REACT_APP_MESSAGING_SENDER_ID=your_messaging_sender_id
    REACT_APP_APP_ID=your_app_id
    REACT_APP_MEASUREMENT_ID=your_measurement_id
+   REACT_APP_BACKEND_URL=your_backend_url
    ```
 
 5. **Start the backend server:**

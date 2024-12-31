@@ -6,10 +6,12 @@ const AttemptHistory = () => {
   const [attempts, setAttempts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const backendUrl = process.env.REACT_APP_BACKEND_URL
+  const history_url = `${backendUrl}/user-attempts/test-user`;
   useEffect(() => {
     const fetchAttempts = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/user-attempts/test-user');
+        const response = await axios.get(history_url);
         setAttempts(response.data);
       } catch (error) {
         console.error('Failed to fetch attempts:', error);
